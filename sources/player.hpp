@@ -1,3 +1,6 @@
+#ifndef Player_HPP
+#define Player_HPP
+
 #include <string>
 
 using namespace std;
@@ -14,3 +17,5 @@ class Player{
     int cardesTaken();
 };
 }
+
+#endif
