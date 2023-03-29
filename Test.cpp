@@ -9,7 +9,7 @@
 using namespace ariel;
 using namespace std;
 
-TEST_CASE("1"){
+TEST_CASE("Initial game"){
     Player p1("Alice");
     Player p2("Bob");
 
@@ -22,8 +22,17 @@ TEST_CASE("1"){
 
 
 }
+TEST_CASE("Playing game"){
+    Player p1("Alice");
+    Player p2("Bob");
+    Game game(p1,p2);
+    game.playAll();
+    CHECK(p1.stacksize()==0);
+    CHECK(p2.stacksize()==0);
+    CHECK(p1.cardesTaken()+p2.cardesTaken()==52);
+}
 
-TEST_CASE("2"){
+TEST_CASE("Checking that there are always 52 cards"){
     Player p1("Alice");
     Player p2("Bob");
 
@@ -35,22 +44,8 @@ TEST_CASE("2"){
     }
 }
 
-TEST_CASE("3"){
-    Player p1("Alice");
-    Player p2("Bob");
 
-    Game game(p1,p2);
-
-    int i=0;
-    while(i<15 && p2.stacksize()>0 && p1.stacksize()>0){
-        game.playTurn();
-        i++;
-    }
-    CHECK(p1.stacksize()==0);
-    CHECK(p2.stacksize()==0);
-}
-
-TEST_CASE("4"){
+TEST_CASE("Check the functions no throw exception"){
 Player p1("Alice");
 Player p2("Bob");
 Game game(p1,p2);
@@ -61,7 +56,17 @@ CHECK_NOTHROW(game.printLog());
 CHECK_NOTHROW(game.printLastTurn());
 }
 
-TEST_CASE("5"){
+TEST_CASE ("Check the players that created are the players that play"){
+    Player p1("Alice");
+    Player p2("Bob");
+
+    Game game(p1,p2);
+
+    CHECK(game.p1.name == "Alice");
+    CHECK(game.p2.name == "Bob");
+}
+
+TEST_CASE("Check there is no errors at the middle of the game"){
     Player p1("Alice");
     Player p2("Bob");
     Game game(p1, p2);

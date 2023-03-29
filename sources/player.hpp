@@ -7,10 +7,10 @@ using namespace std;
 
 namespace ariel{
 class Player{
-
-    string name;
+    
     public:
-
+    string name;
+    
     Player(string name);
 
     int stacksize();
