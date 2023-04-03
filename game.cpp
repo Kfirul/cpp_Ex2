@@ -61,6 +61,8 @@ if (p1.stack.size() == 0 || p2.stack.size() == 0) {
         turns.push_back(p1.name + " played " + p1Card.toString() + ", " + p2.name + " played " + p2Card.toString() + ". Draw.");
         if (p1.stack.size() == 0 || p2.stack.size() == 0) {
             cout << "The game is over with a draw on the last turn" << endl;
+            p1.cardsWin=+count/2;
+            p2.cardsWin=+count/2;
             return;
         }
         //put the card upside downs
@@ -68,12 +70,18 @@ if (p1.stack.size() == 0 || p2.stack.size() == 0) {
         p2Card = p2.stack[0];
         p1.stack.erase(p1.stack.begin());
         p2.stack.erase(p2.stack.begin());
-
+        count += 2;
+        if (p1.stack.size() == 0 || p2.stack.size() == 0) {
+            cout << "The game is over with a draw on the last turn" << endl;
+            p1.cardsWin=+count/2;
+            p2.cardsWin=+count/2;
+            return;
+        }
         p1Card = p1.stack[0];
         p2Card = p2.stack[0];
         p1.stack.erase(p1.stack.begin());
         p2.stack.erase(p2.stack.begin());
-        count += 4;
+        count += 2;
     }
 
     if (p1Card.compare(p2Card) == 1) {
@@ -99,7 +107,7 @@ void Game::printWiner() {
         if(p1.cardesTaken()>p2.cardesTaken())
             cout<<p1.name<<endl;
         else if(p1.cardesTaken()<p2.cardesTaken())
-            cout<<p2.name<<endl;
+            cout<<p2->name<<endl;
             else cout<<"draw"<<endl;
     }
 
@@ -119,5 +127,5 @@ double drawRate = draws / totalTurns * 100;
 cout << p1.name << " Stats: " << "Win Rate: " << p1WinRate << "%, Cards Won: " << p1.cardsTaken() << endl;
 cout << p2.name << " Stats: " << "Win Rate: " << p2WinRate << "%, Cards Won: " << p2.cardsTaken() << endl;
 cout << "Draw Rate: " << drawRate << "%, Draws: " << draws << endl;
-
+}
 #endif
