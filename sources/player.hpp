@@ -13,7 +13,7 @@ class Player{
     public:
     string name;
     vector<card> stackSize;
-    int cardsWin;
+    vector<card> cardsWin;
     
     Player(string name);
 

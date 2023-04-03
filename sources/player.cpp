@@ -3,11 +3,8 @@
 
 using namespace ariel;
 
-Player::Player(string name){
-    this->name=name;
-    this->cardsWin=0;
-    this->stackSize= new vector<card>;
-}
+Player::Player(string name) : name(name), cardsWin(), stackSize() {}
+
     int Player :: stacksize(){
         return this->stackSize.size();
 }
