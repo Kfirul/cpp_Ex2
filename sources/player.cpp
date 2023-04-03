@@ -5,11 +5,13 @@ using namespace ariel;
 
 Player::Player(string name){
     this->name=name;
+    this->cardsWin=0;
+    this->stackSize= new vector<card>;
 }
     int Player :: stacksize(){
-    return 26;
+        return this->stackSize.size();
 }
 
 int Player :: cardesTaken(){
-    return 0;
+        return this->cardsWin;
 }
