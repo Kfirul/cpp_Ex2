@@ -8,10 +8,11 @@ class Game{
 
     public:
 
-    Player p1;
-    Player p2;
+    Player &p1;
+    Player &p2;
     vector<string> turns;
     int draws;
+    
 
    Game(Player &p1,Player&p2);
 

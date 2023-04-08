@@ -3,7 +3,7 @@
 
 using namespace ariel;
 
-Player::Player(string name) : name(name), cardsWin(0), stack() {
+Player::Player(string name) : name(name), cardsWin(0), stack(),winCount(0) {
         if (this->name.empty()) {
         throw runtime_error("Player names cannot be empty");
     }

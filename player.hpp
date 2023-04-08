@@ -15,6 +15,7 @@ class Player{
     string name;
     vector<card> stack;
     int cardsWin;
+    int winCount;
     
     Player(string name);
 
