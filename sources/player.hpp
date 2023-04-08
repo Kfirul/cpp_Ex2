@@ -1,6 +1,7 @@
 #ifndef Player_HPP
 #define Player_HPP
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include "card.hpp"
@@ -12,8 +13,9 @@ class Player{
     
     public:
     string name;
-    vector<card> stackSize;
-    vector<card> cardsWin;
+    vector<card> stack;
+    int cardsWin;
+    int winCount;
     
     Player(string name);
 
