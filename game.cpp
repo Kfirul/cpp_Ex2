@@ -7,25 +7,29 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <iostream>
 
 
 using namespace std;
 using namespace ariel;
 
-Game::Game(Player p1, Player p2) : p1(p1), p2(p2),turns(),draws(0) {
+Game::Game(Player &p1,Player &p2) : p1(p1), p2(p2),turns(),draws(0) {
+    // if(&p1==&p2)
+    //     throw runtime_error("Same player");
+    
     vector<card> deck;
-    string suitTemp;
     for (int i = 1; i < 14; i++) {
-        for (int j = 1; j < 5; j++) {
-            if (j == 1) suitTemp = "Hearts";
-            else if (j == 2) suitTemp = "Diamonds";
-            else if (j == 3) suitTemp = "Clubs";
-            else suitTemp = "Spades";
-
-            card newCard(i, suitTemp);
-            deck.push_back(newCard);
+        
+            card newCard1(i, "Hearts");
+            deck.push_back(newCard1);
+            card newCard2(i, "Diamonds");
+            deck.push_back(newCard2);
+            card newCard3(i, "Clubs");
+            deck.push_back(newCard3);
+            card newCard4(i, "Spades");
+            deck.push_back(newCard4);
         }
-    }
+    
 
     // Shuffle the deck
     random_device rd;
@@ -33,22 +37,24 @@ Game::Game(Player p1, Player p2) : p1(p1), p2(p2),turns(),draws(0) {
     shuffle(deck.begin(), deck.end(), g);
 
     // Divides the deck between the players
-    for (int i = 0; i < deck.size(); i++)
+    for (int i = 0; i < deck.size(); i++){
         if (i % 2 == 0)
-            p1.stack.push_back(deck[i]);
+            this->p1.stack.push_back(deck[static_cast<std::vector<int>::size_type>(i)]);
         else   
-            p2.stack.push_back(deck[i]);
+            this->p2.stack.push_back(deck[static_cast<std::vector<int>::size_type>(i)]);
+    }
 
 }
+
 
 
 void Game::playTurn() {
 
 
-if (p1.stack.size() == 0 || p2.stack.size() == 0) {
-        cout << "The game is over" << endl;
-        return;
-    }
+       if (p1.stack.size() == 0 || p2.stack.size() == 0) 
+        throw runtime_error("Cannot play turn, one player has an empty stack");
+    
+    
 
     card p1Card = p1.stack[0];
     card p2Card = p2.stack[0];
@@ -94,7 +100,10 @@ if (p1.stack.size() == 0 || p2.stack.size() == 0) {
     
 }
 void Game::printLastTurn() {
-    cout<<turns.pop_back()<<endl;
+     if (turns.empty()) {
+        throw runtime_error("Cannot print last turn, no turns have been played yet");
+    }
+    cout<<turns[turns.size()-1]<<endl;
  }
 
 void Game::playAll() {
@@ -103,11 +112,11 @@ void Game::playAll() {
  }
 
 void Game::printWiner() {
-    if(p1.stackSize==0 || p2.stackSize==0){
+    if(p1.stacksize()==0 || p2.stacksize()==0){
         if(p1.cardesTaken()>p2.cardesTaken())
             cout<<p1.name<<endl;
         else if(p1.cardesTaken()<p2.cardesTaken())
-            cout<<p2->name<<endl;
+            cout<<p2.name<<endl;
             else cout<<"draw"<<endl;
     }
 
@@ -115,17 +124,17 @@ void Game::printWiner() {
 
 void Game::printLog() {
      for (int i = 0; i < turns.size(); i++)
-        cout << turns[i] << endl;
+        cout << turns[static_cast<std::vector<int>::size_type>(i)] << endl;
  }
 
 void Game::printStats() {
 int totalTurns = turns.size();
-double p1WinRate = (double)p1.cardsTaken()/2 / totalTurns * 100;
-double p2WinRate = (double)p2.cardsTaken()/2 / totalTurns * 100;
+double p1WinRate = (double)p1.cardesTaken()/2 / totalTurns * 100;
+double p2WinRate = (double)p2.cardesTaken()/2 / totalTurns * 100;
 double drawRate = draws / totalTurns * 100;
 
-cout << p1.name << " Stats: " << "Win Rate: " << p1WinRate << "%, Cards Won: " << p1.cardsTaken() << endl;
-cout << p2.name << " Stats: " << "Win Rate: " << p2WinRate << "%, Cards Won: " << p2.cardsTaken() << endl;
+cout << p1.name << " Stats: " << "Win Rate: " << p1WinRate << "%, Cards Won: " << p1.cardesTaken() << endl;
+cout << p2.name << " Stats: " << "Win Rate: " << p2WinRate << "%, Cards Won: " << p2.cardesTaken() << endl;
 cout << "Draw Rate: " << drawRate << "%, Draws: " << draws << endl;
 }
 #endif

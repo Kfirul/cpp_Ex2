@@ -30,7 +30,9 @@ int card::compare(card a) {
 }
 
 string card::toString() {
-    if (this->num == 11) {
+    if (this->num == 1) {
+        return "Ace of " + this->suit;
+    } else if (this->num == 11) {
         return "Prince of " + this->suit;
     } else if (this->num == 12) {
         return "Queen of " + this->suit;

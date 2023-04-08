@@ -13,7 +13,7 @@ class Game{
     vector<string> turns;
     int draws;
 
-    Game(Player p1, Player p2);
+   Game(Player &p1,Player&p2);
 
     void playTurn();
     void printLastTurn();
