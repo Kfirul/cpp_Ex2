@@ -5,12 +5,12 @@
 using namespace std;
 using namespace ariel;
 
-card::card(int num, string suit) {
+card::card(int num, string suit) { // Constructor for a card object with a given number and suit
     this->num = num;
     this->suit = suit;
 }
 
-int card::compare(card other) {
+int card::compare(card other) { // Compare two card objects and return an integer representing their relative values
     if (this->num == other.num) {
         return 0;
     } else if (this->num == 1) {
@@ -29,7 +29,8 @@ int card::compare(card other) {
     return -1;
 }
 
-string card::toString() {
+string card::toString() { // Return a string representation of the card object
+
     if (this->num == 1) {
         return "Ace of " + this->suit;
     } else if (this->num == 11) {

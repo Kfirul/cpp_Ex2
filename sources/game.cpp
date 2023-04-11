@@ -30,13 +30,14 @@ Game::Game(Player &player1, Player &player2) : player1(player1), player2(player2
     deals(deck,player1,player2);
 }
 
-void Game::shuffleDeck(vector<card>& deck){// Shuffles the given deck of cards.
+void Game::shuffleDeck(vector<card>& deck){// Shuffles the deck
     random_device rd;
     mt19937 g(rd());
     shuffle(deck.begin(), deck.end(), g);
 }
-void Game::deals(vector<card>& deck, Player& player1, Player& player2){// Deals the deck of cards between the two players.
-     // Divides the deck between the players
+
+void Game::deals(vector<card>& deck, Player& player1, Player& player2){// Divides the deck between the players
+  
      for (size_t i = 0; i < deck.size(); i++)
     {
         if (i % 2 == 0)
