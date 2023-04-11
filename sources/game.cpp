@@ -76,10 +76,20 @@ void Game::playTurn()
         // put the card upside downs
     player1.play();
     player2.play();
+
+    count += 2;
+if (player1.stacksize() == 0 || player2.stacksize() == 0)
+        {
+            cout << "The game is over with a draw on the last turn" << endl;
+            player1.plusCardsWin(count / 2);
+            player2.plusCardsWin(count / 2);
+            return;
+        }
+
     player1Card = player1.play();
     player2Card = player2.play();
     
-        count += 4;
+        count += 2;
     }
 
     if (player1Card.compare(player2Card) == 1)
