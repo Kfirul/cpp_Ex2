@@ -10,20 +10,20 @@ card::card(int num, string suit) {
     this->suit = suit;
 }
 
-int card::compare(card a) {
-    if (this->num == a.num) {
+int card::compare(card other) {
+    if (this->num == other.num) {
         return 0;
     } else if (this->num == 1) {
-        if (a.num == 2) {
+        if (other.num == 2) {
             return -1;
         }
         return 1;
-    } else if (a.num == 1) {
+    } else if (other.num == 1) {
         if (this->num == 2) {
             return 1;
         }
         return -1;
-    } else if (this->num > a.num) {
+    } else if (this->num > other.num) {
         return 1;
     }
     return -1;

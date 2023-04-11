@@ -6,14 +6,16 @@
 using namespace std;
 namespace ariel{
     class card{
-        public:
+        
 
         int num;
         string suit;
 
+        public:
+
         card(int num,string suit);
 
-        int compare(card a);
+        int compare(card other);
         string toString();
         
     };

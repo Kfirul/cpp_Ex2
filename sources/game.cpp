@@ -12,14 +12,11 @@
 using namespace std;
 using namespace ariel;
 
-Game::Game(Player &p1, Player &p2) : p1(p1), p2(p2), turns(), draws(0)
+Game::Game(Player &player1, Player &player2) : player1(player1), player2(player2), turns(), draws(0)
 {
-
-
     vector<card> deck;
     for (int i = 1; i < 14; i++)
     {
-
         card newCard1(i, "Hearts");
         deck.push_back(newCard1);
         card newCard2(i, "Diamonds");
@@ -29,79 +26,73 @@ Game::Game(Player &p1, Player &p2) : p1(p1), p2(p2), turns(), draws(0)
         card newCard4(i, "Spades");
         deck.push_back(newCard4);
     }
+    shuffleDeck(deck);
+    deals(deck,player1,player2);
+}
 
-    // Shuffle the deck
+void Game::shuffleDeck(vector<card>& deck){// Shuffles the given deck of cards.
     random_device rd;
     mt19937 g(rd());
     shuffle(deck.begin(), deck.end(), g);
-
-    // Divides the deck between the players
-    for (int i = 0; i < deck.size(); i++)
+}
+void Game::deals(vector<card>& deck, Player& player1, Player& player2){// Deals the deck of cards between the two players.
+     // Divides the deck between the players
+     for (size_t i = 0; i < deck.size(); i++)
     {
         if (i % 2 == 0)
-            this->p1.stack.push_back(deck[static_cast<std::vector<int>::size_type>(i)]);
+            player1.addCard(deck[i]);
         else
-            this->p2.stack.push_back(deck[static_cast<std::vector<int>::size_type>(i)]);
+            player2.addCard(deck[i]);
     }
+   
 }
+
 
 void Game::playTurn()
 {
+
     string str="";
-    if (&p1 == &p2)
+    if (&player1 == &player2)
         throw invalid_argument("Same player");
 
-    if (p1.stack.size() == 0 || p2.stack.size() == 0)
+    if (player1.stacksize() == 0 || player2.stacksize() == 0)
         throw runtime_error("Cannot play turn, one player has an empty stack");
 
-    card p1Card = p1.stack[0];
-    card p2Card = p2.stack[0];
-    p1.stack.erase(p1.stack.begin());
-    p2.stack.erase(p2.stack.begin());
+    card player1Card = player1.play();
+    card player2Card = player2.play();
     int count = 2;
 
-    while (p1Card.compare(p2Card) == 0)
+    while (player1Card.compare(player2Card) == 0)
     {
-        str+= p1.name + " played " + p1Card.toString() + ", " + p2.name + " played " + p2Card.toString() + ". Draw. ";
+        str+= player1.getName() + " played " + player1Card.toString() + ", " + player2.getName() + " played " + player2Card.toString() + ". Draw. ";
         draws++;
-        if (p1.stack.size() == 0 || p2.stack.size() == 0)
+        if (player1.stacksize() == 0 || player2.stacksize() == 0)
         {
             cout << "The game is over with a draw on the last turn" << endl;
-            p1.cardsWin = +count / 2;
-            p2.cardsWin = +count / 2;
+            player1.plusCardsWin(count / 2);
+            player2.plusCardsWin(count / 2);
             return;
         }
         // put the card upside downs
-        p1Card = p1.stack[0];
-        p2Card = p2.stack[0];
-        p1.stack.erase(p1.stack.begin());
-        p2.stack.erase(p2.stack.begin());
-        count += 2;
-        if (p1.stack.size() == 0 || p2.stack.size() == 0)
-        {
-            cout << "The game is over with a draw on the last turn" << endl;
-            p1.cardsWin = +count / 2;
-            p2.cardsWin = +count / 2;
-            return;
-        }
-        p1Card = p1.stack[0];
-        p2Card = p2.stack[0];
-        p1.stack.erase(p1.stack.begin());
-        p2.stack.erase(p2.stack.begin());
-        count += 2;
+    player1.play();
+    player2.play();
+    player1Card = player1.play();
+    player2Card = player2.play();
+    
+        count += 4;
     }
 
-    if (p1Card.compare(p2Card) == 1)
+    if (player1Card.compare(player2Card) == 1)
     {
-        p1.cardsWin += count;
-        str+= p1.name + " played " + p1Card.toString() + ", " + p2.name + " played " + p2Card.toString() + ". " + p1.name + " wins.";
-        p1.winCount++;
+        player1.plusCardsWin(count);
+        str+= player1.getName() + " played " + player1Card.toString() + ", " + player2.getName() + " played " + player2Card.toString() + ". " + player1.getName() + " wins.";
+        player1.plusWinCount();
     }
     else
     {
-        str+=p1.name + " played " + p1Card.toString() + ", " + p2.name + " played " + p2Card.toString() + ". " + p2.name + " wins.";
-        p2.cardsWin += count;
-        p2.winCount++;
+        str+=player1.getName() + " played " + player1Card.toString() + ", " + player2.getName() + " played " + player2Card.toString() + ". " + player2.getName() + " wins.";
+        player2.plusCardsWin(count);
+        player2.plusWinCount();
     }
     turns.push_back(str);
     
@@ -117,18 +108,19 @@ void Game::printLastTurn()
 
 void Game::playAll()
 {
-    while (p1.stacksize() > 0 && p2.stacksize() > 0)
+    
+    while (player1.stacksize() > 0 && player2.stacksize() > 0)
         this->playTurn();
 }
 
 void Game::printWiner()
 {
-    if (p1.stacksize() == 0 || p2.stacksize() == 0)
+    if (player1.stacksize() == 0 || player2.stacksize() == 0)
     {
-        if (p1.cardesTaken() > p2.cardesTaken())
-            cout << p1.name << endl;
-        else if (p1.cardesTaken() < p2.cardesTaken())
-            cout << p2.name << endl;
+        if (player1.cardesTaken() > player2.cardesTaken())
+            cout << player1.getName() << endl;
+        else if (player1.cardesTaken() < player2.cardesTaken())
+            cout << player2.getName() << endl;
         else
             cout << "draw" << endl;
     }
@@ -138,22 +130,22 @@ void Game::printWiner()
 
 void Game::printLog()
 {
-    for (int i = 0; i < turns.size(); i++)
-        cout << turns[static_cast<std::vector<int>::size_type>(i)] << endl;
+    for (size_t i = 0; i < turns.size(); i++)
+        cout << turns[i] << endl;
 }
 
 void Game::printStats()
 {
     int totalTurns = turns.size();
-    double p1WinRate = (double)p1.winCount / totalTurns * 100;
-    double p2WinRate = (double)p2.winCount / totalTurns * 100;
+    double player1WinRate = (double)player1.getWinCount() / totalTurns * 100;
+    double player2WinRate = (double)player2.getWinCount() / totalTurns * 100;
     double drawRate = (double)draws / totalTurns * 100;
 
 
-    cout << p1.name << " Stats: "
-         << "Win Rate: " << p1WinRate << "%, Cards Won: " << p1.cardesTaken() << endl;
-    cout << p2.name << " Stats: "
-         << "Win Rate: " << p2WinRate << "%, Cards Won: " << p2.cardesTaken() << endl;
+    cout << player1.getName() << " Stats: "
+         << "Win Rate: " << player1WinRate << "%, Cards Won: " << player1.cardesTaken() << endl;
+    cout << player2.getName() << " Stats: "
+         << "Win Rate: " << player2WinRate << "%, Cards Won: " << player2.cardesTaken() << endl;
     cout << "Draw Rate: " << drawRate << "%, Draws: " << draws << endl;
 }
 

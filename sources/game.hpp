@@ -6,16 +6,19 @@ using namespace std;
  namespace ariel{
 class Game{
 
-    public:
+    
 
-    Player &p1;
-    Player &p2;
+
+    Player &player1;
+    Player &player2;
     vector<string> turns;
     int draws;
     
+    public:
 
-   Game(Player &p1,Player&p2);
-
+   Game(Player &player1,Player&player2);
+    void shuffleDeck(vector<card>& deck);
+    void deals(vector<card>& deck, Player& player1, Player& player2);
     void playTurn();
     void printLastTurn();
     void playAll();
